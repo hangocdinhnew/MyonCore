@@ -6,7 +6,7 @@
 namespace MyonR {
 
 Window::Window(std::string name, int width, int height) {
-  if (SDL_Init(SDL_INIT_VIDEO)) {
+  if (!SDL_Init(SDL_INIT_VIDEO)) {
     MR_CORE_ERROR("Failed to initialize SDL Video!");
 
     MR_DO_CORE_ASSERT("With error: {}", SDL_GetError());

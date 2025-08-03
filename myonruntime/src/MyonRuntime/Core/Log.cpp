@@ -5,7 +5,7 @@
 #include <spdlog/sinks/basic_file_sink.h>
 // clang-format on
 
-namespace Myon {
+namespace MyonR {
 
 std::shared_ptr<spdlog::logger> Log::s_CoreLogger;
 std::shared_ptr<spdlog::logger> Log::s_ClientLogger;

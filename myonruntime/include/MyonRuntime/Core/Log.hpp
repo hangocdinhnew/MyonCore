@@ -1,11 +1,13 @@
 #pragma once
 
 // clang-format off
+#include <cstdlib>
+
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 // clang-format on
 
-namespace Myon {
+namespace MyonR {
 
 class Log {
 public:
@@ -25,15 +27,43 @@ private:
 
 } // namespace MyonRuntime
 
-#define MR_CORE_TRACE(...) ::Myon::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define MR_CORE_INFO(...) ::Myon::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define MR_CORE_WARN(...) ::Myon::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define MR_CORE_ERROR(...) ::Myon::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define MR_CORE_TRACE(...) ::MyonR::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define MR_CORE_INFO(...) ::MyonR::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define MR_CORE_WARN(...) ::MyonR::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define MR_CORE_ERROR(...) ::MyonR::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define MR_CORE_CRITICAL(...)                                                  \
-  ::Myon::Log::GetCoreLogger()->critical(__VA_ARGS__)
+  ::MyonR::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
-#define MR_TRACE(...) ::Myon::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define MR_INFO(...) ::Myon::Log::GetClientLogger()->info(__VA_ARGS__)
-#define MR_WARN(...) ::Myon::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define MR_ERROR(...) ::Myon::Log::GetClientLogger()->error(__VA_ARGS__)
-#define MR_CRITICAL(...) ::Myon::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define MR_TRACE(...) ::MyonR::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define MR_INFO(...) ::MyonR::Log::GetClientLogger()->info(__VA_ARGS__)
+#define MR_WARN(...) ::MyonR::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define MR_ERROR(...) ::MyonR::Log::GetClientLogger()->error(__VA_ARGS__)
+#define MR_CRITICAL(...) ::MyonR::Log::GetClientLogger()->critical(__VA_ARGS__)
+
+#define MR_CORE_ASSERT(cond, msg, ...)                                          \
+  do {                                                                          \
+    if (!(cond)) {                                                              \
+      ::MyonR::Log::GetCoreLogger()->critical("[ASSERT] " msg, ##__VA_ARGS__);  \
+      std::abort();                                                             \
+    }                                                                           \
+  } while (false)
+
+#define MR_ASSERT(cond, msg, ...)                                               \
+  do {                                                                          \
+    if (!(cond)) {                                                              \
+      ::MyonR::Log::GetClientLogger()->critical("[ASSERT] " msg, ##__VA_ARGS__);\
+      std::abort();                                                             \
+    }                                                                           \
+  } while (false)
+
+#define MR_DO_CORE_ASSERT(msg, ...)                                             \
+  do {                                                                          \
+    ::MyonR::Log::GetCoreLogger()->critical("[ASSERT] " msg, ##__VA_ARGS__);    \
+    std::abort();                                                               \
+  } while (false)
+
+#define MR_DO_ASSERT(msg, ...)                                                 \
+  do {                                                                         \
+    ::MyonR::Log::GetClientLogger()->critical("[ASSERT] " msg, ##__VA_ARGS__); \
+    std::abort();                                                              \
+  } while (false)

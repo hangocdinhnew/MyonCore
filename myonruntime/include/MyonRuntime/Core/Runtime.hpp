@@ -11,7 +11,7 @@ struct MyonRuntimeConfig {
 
 class MyonRuntime {
 public:
-  MyonRuntime(MyonRuntimeConfig* p_RuntimeConfig);
+  MyonRuntime(MyonRuntimeConfig *p_RuntimeConfig);
   ~MyonRuntime();
 
   void Run();
@@ -19,7 +19,7 @@ public:
 private:
   bool m_ShouldClose;
 
-  Window* m_Window;
+  Window *m_Window;
 };
 
-}
+} // namespace MyonR

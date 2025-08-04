@@ -11,6 +11,23 @@ MyonRuntime::MyonRuntime(MyonRuntimeConfig *p_RuntimeConfig) {
   MR_CORE_INFO("Engine initialized");
 }
 
+void MyonRuntime::Run() {
+  while (!m_ShouldClose) {
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event)) {
+      switch (event.type) {
+      case SDL_EVENT_QUIT:
+      case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
+        m_ShouldClose = true;
+        break;
+      default:
+        break;
+      }
+    }
+  }
+}
+
 MyonRuntime::~MyonRuntime() {
   MR_CORE_INFO("Shutting down Engine...");
 

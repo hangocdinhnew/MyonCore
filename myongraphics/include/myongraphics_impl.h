@@ -11,6 +11,7 @@ typedef struct {
   VkInstance instance;
   VkApplicationInfo appInfo;
   VkInstanceCreateInfo createInfo;
+  VkDebugUtilsMessengerEXT debugMessenger;
 } VulkanInstance;
 
 #ifdef __cplusplus

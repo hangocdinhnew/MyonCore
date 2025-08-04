@@ -12,7 +12,7 @@ extern "C" {
 typedef enum {
   MG_BACKEND_NONE = 0,
   MG_BACKEND_VULKAN,
-  ENUM_FORCE32(BACKEND)
+  ENUM_FORCE32(MG_BACKEND)
 } myonBackend;
 
 typedef enum {
@@ -21,6 +21,16 @@ typedef enum {
   MG_RESULT_BACKEND_ERROR = -2,
   MG_RESULT_UNKNOWN_BACKEND = -3
 } myonResult;
+
+typedef enum {
+  MG_LOG_LEVEL_OFF = 0,
+  MG_LOG_LEVEL_ERROR,
+  MG_LOG_LEVEL_WARN,
+  MG_LOG_LEVEL_INFO,
+  MG_LOG_LEVEL_DEBUG,
+  MG_LOG_LEVEL_TRACE,
+  ENUM_FORCE32(MG_LOG_LEVEL)
+} myonLogLevel;
 
 #ifdef __cplusplus
 }

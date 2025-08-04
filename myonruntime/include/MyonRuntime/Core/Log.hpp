@@ -28,6 +28,7 @@ private:
 } // namespace MyonRuntime
 
 #define MR_CORE_TRACE(...) ::MyonR::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define MR_CORE_DEBUG(...) ::MyonR::Log::GetCoreLogger()->debug(__VA_ARGS__)
 #define MR_CORE_INFO(...) ::MyonR::Log::GetCoreLogger()->info(__VA_ARGS__)
 #define MR_CORE_WARN(...) ::MyonR::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define MR_CORE_ERROR(...) ::MyonR::Log::GetCoreLogger()->error(__VA_ARGS__)
@@ -35,6 +36,7 @@ private:
   ::MyonR::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 #define MR_TRACE(...) ::MyonR::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define MR_DEBUG(...) ::MyonR::Log::GetClientLogger()->debug(__VA_ARGS__)
 #define MR_INFO(...) ::MyonR::Log::GetClientLogger()->info(__VA_ARGS__)
 #define MR_WARN(...) ::MyonR::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define MR_ERROR(...) ::MyonR::Log::GetClientLogger()->error(__VA_ARGS__)

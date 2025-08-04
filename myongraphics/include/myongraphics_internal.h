@@ -11,4 +11,6 @@ struct myonInstance_T {
   };
 };
 
+void myonLog(myonLogLevel level, const char* fmt, ...);
+
 #endif

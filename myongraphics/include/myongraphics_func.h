@@ -7,7 +7,7 @@ extern "C" {
 
 #include "myongraphics_structs.h"
 
-myonInstance myonCreateInstance(Backend backend);
+myonResult myonCreateInstance(myonBackend backend, myonInstance* instance);
 void myonDestroyInstance(myonInstance instance);
 
 #ifdef __cplusplus

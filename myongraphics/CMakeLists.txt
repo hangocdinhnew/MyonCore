@@ -4,6 +4,7 @@ add_library(myongraphics SHARED)
 
 target_sources(myongraphics
     PRIVATE
+      include/myongraphics_internal.h
       src/myongraphics_instance.c
     PUBLIC
       include/myongraphics_enums.h

@@ -5,16 +5,7 @@
 extern "C" {
 #endif
 
-#include "myongraphics_enums.h"
-#include "myongraphics_impl.h"
-
-typedef struct {
-  Backend backend;
-  union {
-    VulkanInstance vulkan;
-  };
-} myonInstance_T;
-
+typedef struct myonInstance_T myonInstance_T;
 typedef myonInstance_T* myonInstance;
 
 #ifdef __cplusplus

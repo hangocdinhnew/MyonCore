@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "myongraphics_internal.h"
 #include "myongraphics.h"
 #include "vulkan/vulkan_core.h"
 // clang-format on
@@ -72,18 +73,17 @@ static void init_filtered_extensions(void) {
   free(props);
 }
 
-myonInstance myonCreateInstance(Backend backend) {
-  myonInstance instance = malloc(sizeof(myonInstance_T));
-  if (!instance) {
-    fprintf(stderr, "[myongraphics] Out of memory\n");
-    abort();
+myonResult myonCreateInstance(myonBackend backend, myonInstance* instance) {
+  myonInstance internal_Instance = (myonInstance)malloc(sizeof(myonInstance_T));
+  if (!internal_Instance) {
+    return MG_RESULT_OUT_OF_MEMORY;
   }
-  memset(instance, 0, sizeof(myonInstance_T));
+  memset(internal_Instance, 0, sizeof(myonInstance_T));
 
-  instance->backend = backend;
+  internal_Instance->backend = backend;
 
   switch (backend) {
-  case BACKEND_VULKAN: {
+  case MG_BACKEND_VULKAN: {
     init_filtered_extensions();
 
     VkApplicationInfo appInfo = {.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
@@ -91,11 +91,11 @@ myonInstance myonCreateInstance(Backend backend) {
                                  .pEngineName = "Myon Graphics Engine",
                                  .engineVersion = VK_MAKE_VERSION(1, 0, 0),
                                  .apiVersion = VK_API_VERSION_1_4};
-    instance->vulkan.appInfo = appInfo;
+    internal_Instance->vulkan.appInfo = appInfo;
 
     VkInstanceCreateInfo createInfo = {
         .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-        .pApplicationInfo = &instance->vulkan.appInfo,
+        .pApplicationInfo = &internal_Instance->vulkan.appInfo,
         .enabledExtensionCount = filtered_extension_count,
         .ppEnabledExtensionNames = filtered_extensions};
 
@@ -107,32 +107,33 @@ myonInstance myonCreateInstance(Backend backend) {
       }
     }
 
-    instance->vulkan.createInfo = createInfo;
+    internal_Instance->vulkan.createInfo = createInfo;
 
     VkInstance vk_Instance;
     VkResult result =
-        vkCreateInstance(&instance->vulkan.createInfo, NULL, &vk_Instance);
+        vkCreateInstance(&internal_Instance->vulkan.createInfo, NULL, &vk_Instance);
 
     if (result != VK_SUCCESS) {
       fprintf(stderr, "[myongraphics] Failed to create Vulkan instance: %d\n",
               result);
       abort();
     }
-    instance->vulkan.instance = vk_Instance;
+    internal_Instance->vulkan.instance = vk_Instance;
 
     break;
   }
   default:
-    fprintf(stderr, "[myongraphics] Unknown backend\n");
-    abort();
+    return MG_RESULT_UNKNOWN_BACKEND;
   }
 
-  return instance;
+  *instance = internal_Instance;
+
+  return MG_RESULT_SUCCESS;
 }
 
 void myonDestroyInstance(myonInstance instance) {
   switch (instance->backend) {
-  case BACKEND_VULKAN: {
+  case MG_BACKEND_VULKAN: {
     vkDestroyInstance(instance->vulkan.instance, NULL);
     break;
   }

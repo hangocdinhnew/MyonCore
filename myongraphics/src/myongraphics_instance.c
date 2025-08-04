@@ -9,7 +9,7 @@
 
 #define MAX_EXTENSIONS 32
 
-static const char *desired_extensions[MAX_EXTENSIONS] = {
+static const char *desired_extensions[] = {
     "VK_KHR_surface",
 
 #if defined(_WIN32)
@@ -31,7 +31,7 @@ static const char *desired_extensions[MAX_EXTENSIONS] = {
     "VK_EXT_debug_utils",
     "VK_EXT_swapchain_colorspace",
     "VK_KHR_get_physical_device_properties2",
-};
+    NULL};
 
 static uint32_t desired_extension_count = 0;
 static const char *filtered_extensions[MAX_EXTENSIONS];
@@ -45,8 +45,10 @@ static void init_filtered_extensions(void) {
       malloc(sizeof(VkExtensionProperties) * available_count);
   vkEnumerateInstanceExtensionProperties(NULL, &available_count, props);
 
-  desired_extension_count =
-      sizeof(desired_extensions) / sizeof(desired_extensions[0]);
+  for (desired_extension_count = 0;
+       desired_extensions[desired_extension_count] != NULL;
+       ++desired_extension_count)
+    ;
   filtered_extension_count = 0;
 
   for (uint32_t i = 0; i < desired_extension_count; ++i) {
@@ -96,6 +98,15 @@ myonInstance myonCreateInstance(Backend backend) {
         .pApplicationInfo = &instance->vulkan.appInfo,
         .enabledExtensionCount = filtered_extension_count,
         .ppEnabledExtensionNames = filtered_extensions};
+
+    for (uint32_t i = 0; i < filtered_extension_count; ++i) {
+      if (strcmp(filtered_extensions[i], "VK_KHR_portability_enumeration") ==
+          0) {
+        createInfo.flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+        break;
+      }
+    }
+
     instance->vulkan.createInfo = createInfo;
 
     VkInstance vk_Instance;

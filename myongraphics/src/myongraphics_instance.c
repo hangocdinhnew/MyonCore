@@ -147,12 +147,12 @@ static void vk_init_filtered_extensions() {
 
   free(props);
 
-  myonLog(MG_LOG_LEVEL_DEBUG, "Extensions: [");
+  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Extensions: [");
   for (size_t i = 0; i < vk_filtered_extension_count; i++) {
-    myonLog(MG_LOG_LEVEL_DEBUG, "\t%s,", vk_filtered_extensions[i]);
+    myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - \t%s,", vk_filtered_extensions[i]);
   }
-  myonLog(MG_LOG_LEVEL_DEBUG, "]");
-  myonLog(MG_LOG_LEVEL_DEBUG, "Extensions count: %d", vk_filtered_extension_count);
+  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - ]");
+  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Extensions count: %d", vk_filtered_extension_count);
 
   myonLog(MG_LOG_LEVEL_DEBUG,
           "Vulkan - vk_init_filtered_extensions succeeded!");
@@ -179,11 +179,11 @@ static void vk_init_filtered_layers() {
 
   free(props);
 
-  myonLog(MG_LOG_LEVEL_DEBUG, "Layers: [");
+  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Layers: [");
   for (size_t i = 0; i < vk_filtered_layers_count; i++) {
-    myonLog(MG_LOG_LEVEL_DEBUG, "\t%s,", vk_filtered_layers[i]);
+    myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - \t%s,", vk_filtered_layers[i]);
   }
-  myonLog(MG_LOG_LEVEL_DEBUG, "]");
+  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - ]");
   myonLog(MG_LOG_LEVEL_DEBUG, "Layers count: %d", vk_filtered_layers_count);
 
   myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - vk_init_filtered_layers succeeded!");
@@ -208,7 +208,6 @@ myonResult myonCreateInstance(myonBackend backend, myonInstance *instance) {
 
     VkApplicationInfo appInfo = {.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
                                  .applicationVersion = VK_MAKE_VERSION(1, 0, 0),
-                                 .pEngineName = "Myon Graphics Engine",
                                  .engineVersion = VK_MAKE_VERSION(1, 0, 0),
                                  .apiVersion = VK_API_VERSION_1_4};
     internal_Instance->vulkan.appInfo = appInfo;

@@ -10,9 +10,9 @@ extern "C" {
 #include "myongraphics_enums.h"
 #include "myongraphics_structs.h"
 
-typedef void (*myonLogCallback)(myonLogLevel level, const char* message);
+typedef void (*myonLogCallback)(myonLogLevel level, const char *message);
 
-myonResult myonCreateInstance(myonBackend backend, myonInstance* instance);
+myonResult myonCreateInstance(myonBackend backend, myonInstance *instance);
 void myonDestroyInstance(myonInstance instance);
 
 void myonSetLogCallback(myonLogCallback callback);

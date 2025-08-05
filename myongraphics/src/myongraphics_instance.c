@@ -152,7 +152,8 @@ static void vk_init_filtered_extensions() {
     myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - \t%s,", vk_filtered_extensions[i]);
   }
   myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - ]");
-  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Extensions count: %d", vk_filtered_extension_count);
+  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Extensions count: %d",
+          vk_filtered_extension_count);
 
   myonLog(MG_LOG_LEVEL_DEBUG,
           "Vulkan - vk_init_filtered_extensions succeeded!");
@@ -184,7 +185,8 @@ static void vk_init_filtered_layers() {
     myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - \t%s,", vk_filtered_layers[i]);
   }
   myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - ]");
-  myonLog(MG_LOG_LEVEL_DEBUG, "Layers count: %d", vk_filtered_layers_count);
+  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Layers count: %d",
+          vk_filtered_layers_count);
 
   myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - vk_init_filtered_layers succeeded!");
 }
@@ -269,6 +271,17 @@ myonResult myonCreateInstance(myonBackend backend, myonInstance *instance) {
 
     break;
   }
+
+  case MG_BACKEND_METAL: {
+#ifndef MYONG_METAL
+    myonLog(MG_LOG_LEVEL_ERROR, "Metal - Metal is not enabled!");
+    return MG_RESULT_UNKNOWN_BACKEND;
+#else
+    myonLog(MG_LOG_LEVEL_DEBUG, "Metal - Instance creation is no-op.");
+    break;
+#endif
+  }
+
   default:
     myonLog(MG_LOG_LEVEL_ERROR, "Unknown backend!");
     return MG_RESULT_UNKNOWN_BACKEND;
@@ -295,6 +308,16 @@ void myonDestroyInstance(myonInstance instance) {
     vkDestroyInstance(instance->vulkan.instance, NULL);
     break;
   }
+
+  case MG_BACKEND_METAL: {
+#ifndef MYONG_METAL
+    myonLog(MG_LOG_LEVEL_ERROR, "Metal - Metal Is not enabled!");
+#else
+    myonLog(MG_LOG_LEVEL_DEBUG, "Metal - Instance destruction is no-op.");
+#endif
+    break;
+  }
+
   default:
     break;
   }

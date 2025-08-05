@@ -12,6 +12,7 @@ extern "C" {
 typedef enum {
   MG_BACKEND_NONE = 0,
   MG_BACKEND_VULKAN,
+  MG_BACKEND_METAL,
   ENUM_FORCE32(MG_BACKEND)
 } myonBackend;
 

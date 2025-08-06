@@ -8,22 +8,22 @@ extern "C" {
 #include "myongraphics_enums.h"
 #include "myongraphics_impl.h"
 
-struct myonInstance_T {
-  myonBackend backend;
+struct myonGInstance_T {
+  myonGBackend backend;
   union {
     VulkanInstance vulkan;
   };
 };
 
-struct myonPhysicalDevice_T {
-  myonBackend backend;
+struct myonGPhysicalDevice_T {
+  myonGBackend backend;
 
   union {
     VulkanPhysicalDevice vulkan;
   };
 };
 
-void myonLog(myonLogLevel level, const char* fmt, ...);
+void myonGLog(myonGLogLevel level, const char* fmt, ...);
 
 #ifdef __cplusplus
 }

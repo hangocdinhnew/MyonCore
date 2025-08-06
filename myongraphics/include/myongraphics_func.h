@@ -10,17 +10,17 @@ extern "C" {
 #include "myongraphics_enums.h"
 #include "myongraphics_structs.h"
 
-typedef void (*myonLogCallback)(myonLogLevel level, const char *message);
+typedef void (*myonGLogCallback)(myonGLogLevel level, const char *message);
 
-myonResult myonCreateInstance(myonBackend backend, myonInstance *instance);
-void myonDestroyInstance(myonInstance instance);
+myonGResult myonGCreateInstance(myonGBackend backend, myonGInstance *instance);
+void myonGDestroyInstance(myonGInstance instance);
 
-myonResult myonEnumeratePhysicalDevices(myonInstance instance,
-                                        myonPhysicalDevice *physicalDevice);
-void myonDestroyPhysicalDevice(myonPhysicalDevice device);
+myonGResult myonGEnumeratePhysicalDevices(myonGInstance instance,
+                                        myonGPhysicalDevice *physicalDevice);
+void myonGDestroyPhysicalDevice(myonGPhysicalDevice device);
 
-void myonSetLogCallback(myonLogCallback callback);
-void myonSetLogLevel(myonLogLevel level);
+void myonGSetLogCallback(myonGLogCallback callback);
+void myonGSetLogLevel(myonGLogLevel level);
 
 #ifdef __cplusplus
 }

@@ -5,11 +5,11 @@
 extern "C" {
 #endif
 
-typedef struct myonInstance_T myonInstance_T;
-typedef myonInstance_T *myonInstance;
+typedef struct myonGInstance_T myonGInstance_T;
+typedef myonGInstance_T *myonGInstance;
 
-typedef struct myonPhysicalDevice_T myonPhysicalDevice_T;
-typedef myonPhysicalDevice_T *myonPhysicalDevice;
+typedef struct myonGPhysicalDevice_T myonGPhysicalDevice_T;
+typedef myonGPhysicalDevice_T *myonGPhysicalDevice;
 
 #ifdef __cplusplus
 }

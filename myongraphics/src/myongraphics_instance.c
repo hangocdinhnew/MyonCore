@@ -11,14 +11,16 @@
 #define MAX_EXTENSIONS 32
 #define MAX_LAYERS 4
 
-static myonLogCallback g_logCallback = NULL;
-static myonLogLevel g_logLevel = MG_LOG_LEVEL_WARN;
+static myonGLogCallback g_logCallback = NULL;
+static myonGLogLevel g_logLevel = MG_LOG_LEVEL_WARN;
 
-void myonSetLogCallback(myonLogCallback callback) { g_logCallback = callback; }
+void myonGSetLogCallback(myonGLogCallback callback) {
+  g_logCallback = callback;
+}
 
-void myonSetLogLevel(myonLogLevel level) { g_logLevel = level; }
+void myonGSetLogLevel(myonGLogLevel level) { g_logLevel = level; }
 
-void myonLog(myonLogLevel level, const char *fmt, ...) {
+void myonGLog(myonGLogLevel level, const char *fmt, ...) {
   if (level > g_logLevel || level == MG_LOG_LEVEL_OFF) {
     return;
   }
@@ -59,9 +61,9 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vk_DebugCallback(
     VkDebugUtilsMessageSeverityFlagBitsEXT severity,
     VkDebugUtilsMessageTypeFlagsEXT type,
     const VkDebugUtilsMessengerCallbackDataEXT *callbackData, void *userData) {
-  myonLog(MG_LOG_LEVEL_TRACE, "vk_DebugCallback");
+  myonGLog(MG_LOG_LEVEL_TRACE, "vk_DebugCallback");
 
-  myonLogLevel level = MG_LOG_LEVEL_INFO;
+  myonGLogLevel level = MG_LOG_LEVEL_INFO;
 
   if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
     level = MG_LOG_LEVEL_ERROR;
@@ -72,7 +74,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vk_DebugCallback(
   else if (severity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT)
     level = MG_LOG_LEVEL_DEBUG;
 
-  myonLog(level, "Vulkan - %s", callbackData->pMessage);
+  myonGLog(level, "Vulkan - %s", callbackData->pMessage);
 
   return VK_FALSE;
 }
@@ -111,7 +113,7 @@ static const char *vk_filtered_layers[MAX_LAYERS];
 static uint32_t vk_filtered_layers_count = 0;
 
 static void vk_init_filtered_extensions() {
-  myonLog(MG_LOG_LEVEL_TRACE, "Vulkan - vk_init_filtered_extensions");
+  myonGLog(MG_LOG_LEVEL_TRACE, "Vulkan - vk_init_filtered_extensions");
 
   uint32_t available_count = 0;
   vkEnumerateInstanceExtensionProperties(NULL, &available_count, NULL);
@@ -140,27 +142,27 @@ static void vk_init_filtered_extensions() {
     if (found) {
       vk_filtered_extensions[vk_filtered_extension_count++] = desired;
     } else {
-      myonLog(MG_LOG_LEVEL_WARN, "Vulkan - Extension not available: %s",
-              desired);
+      myonGLog(MG_LOG_LEVEL_WARN, "Vulkan - Extension not available: %s",
+               desired);
     }
   }
 
   free(props);
 
-  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Extensions: [");
+  myonGLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Extensions: [");
   for (size_t i = 0; i < vk_filtered_extension_count; i++) {
-    myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - \t%s,", vk_filtered_extensions[i]);
+    myonGLog(MG_LOG_LEVEL_DEBUG, "Vulkan - \t%s,", vk_filtered_extensions[i]);
   }
-  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - ]");
-  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Extensions count: %d",
-          vk_filtered_extension_count);
+  myonGLog(MG_LOG_LEVEL_DEBUG, "Vulkan - ]");
+  myonGLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Extensions count: %d",
+           vk_filtered_extension_count);
 
-  myonLog(MG_LOG_LEVEL_DEBUG,
-          "Vulkan - vk_init_filtered_extensions succeeded!");
+  myonGLog(MG_LOG_LEVEL_DEBUG,
+           "Vulkan - vk_init_filtered_extensions succeeded!");
 }
 
 static void vk_init_filtered_layers() {
-  myonLog(MG_LOG_LEVEL_TRACE, "Vulkan - vk_init_filtered_layers");
+  myonGLog(MG_LOG_LEVEL_TRACE, "Vulkan - vk_init_filtered_layers");
 
   uint32_t count = 0;
   vkEnumerateInstanceLayerProperties(&count, NULL);
@@ -180,23 +182,24 @@ static void vk_init_filtered_layers() {
 
   free(props);
 
-  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Layers: [");
+  myonGLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Layers: [");
   for (size_t i = 0; i < vk_filtered_layers_count; i++) {
-    myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - \t%s,", vk_filtered_layers[i]);
+    myonGLog(MG_LOG_LEVEL_DEBUG, "Vulkan - \t%s,", vk_filtered_layers[i]);
   }
-  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - ]");
-  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Layers count: %d",
-          vk_filtered_layers_count);
+  myonGLog(MG_LOG_LEVEL_DEBUG, "Vulkan - ]");
+  myonGLog(MG_LOG_LEVEL_DEBUG, "Vulkan - Layers count: %d",
+           vk_filtered_layers_count);
 
-  myonLog(MG_LOG_LEVEL_DEBUG, "Vulkan - vk_init_filtered_layers succeeded!");
+  myonGLog(MG_LOG_LEVEL_DEBUG, "Vulkan - vk_init_filtered_layers succeeded!");
 }
 
-myonResult myonCreateInstance(myonBackend backend, myonInstance *instance) {
-  myonLog(MG_LOG_LEVEL_TRACE, "myonCreateInstance");
+myonGResult myonGCreateInstance(myonGBackend backend, myonGInstance *instance) {
+  myonGLog(MG_LOG_LEVEL_TRACE, "myonGCreateInstance");
 
-  myonInstance internal_Instance = (myonInstance)calloc(1, sizeof(myonInstance_T));
+  myonGInstance internal_Instance =
+      (myonGInstance)calloc(1, sizeof(myonGInstance_T));
   if (!internal_Instance) {
-    myonLog(MG_LOG_LEVEL_ERROR, "Out of memory!");
+    myonGLog(MG_LOG_LEVEL_ERROR, "Out of memory!");
     return MG_RESULT_OUT_OF_MEMORY;
   }
 
@@ -236,7 +239,7 @@ myonResult myonCreateInstance(myonBackend backend, myonInstance *instance) {
                                        NULL, &vk_Instance);
 
     if (result != VK_SUCCESS) {
-      myonLog(MG_LOG_LEVEL_ERROR, "Failed to create Vulkan instance!");
+      myonGLog(MG_LOG_LEVEL_ERROR, "Failed to create Vulkan instance!");
       return MG_RESULT_BACKEND_ERROR;
     }
     internal_Instance->vulkan.instance = vk_Instance;
@@ -262,38 +265,38 @@ myonResult myonCreateInstance(myonBackend backend, myonInstance *instance) {
           func(internal_Instance->vulkan.instance, &debugCreateInfo, NULL,
                &internal_Instance->vulkan.debugMessenger);
       if (result != VK_SUCCESS) {
-        myonLog(MG_LOG_LEVEL_WARN, "Failed to create Vulkan debug messenger.");
+        myonGLog(MG_LOG_LEVEL_WARN, "Failed to create Vulkan debug messenger.");
       }
     } else {
-      myonLog(MG_LOG_LEVEL_WARN, "vkCreateDebugUtilsMessengerEXT not found.");
+      myonGLog(MG_LOG_LEVEL_WARN, "vkCreateDebugUtilsMessengerEXT not found.");
     }
 
     break;
   }
 
   case MG_BACKEND_METAL: {
-#ifndef MYONG_METAL
-    myonLog(MG_LOG_LEVEL_ERROR, "Metal - Metal is not enabled!");
+#ifndef myonGG_METAL
+    myonGLog(MG_LOG_LEVEL_ERROR, "Metal - Metal is not enabled!");
     return MG_RESULT_UNKNOWN_BACKEND;
 #else
-    myonLog(MG_LOG_LEVEL_DEBUG, "Metal - Instance creation is no-op.");
+    myonGLog(MG_LOG_LEVEL_DEBUG, "Metal - Instance creation is no-op.");
     break;
 #endif
   }
 
   default:
-    myonLog(MG_LOG_LEVEL_ERROR, "Unknown backend!");
+    myonGLog(MG_LOG_LEVEL_ERROR, "Unknown backend!");
     return MG_RESULT_UNKNOWN_BACKEND;
   }
 
   *instance = internal_Instance;
 
-  myonLog(MG_LOG_LEVEL_DEBUG, "Instance created successfully!");
+  myonGLog(MG_LOG_LEVEL_DEBUG, "Instance created successfully!");
   return MG_RESULT_SUCCESS;
 }
 
-void myonDestroyInstance(myonInstance instance) {
-  myonLog(MG_LOG_LEVEL_TRACE, "myonDestroyInstance");
+void myonGDestroyInstance(myonGInstance instance) {
+  myonGLog(MG_LOG_LEVEL_TRACE, "myonGDestroyInstance");
 
   switch (instance->backend) {
   case MG_BACKEND_VULKAN: {
@@ -309,10 +312,10 @@ void myonDestroyInstance(myonInstance instance) {
   }
 
   case MG_BACKEND_METAL: {
-#ifndef MYONG_METAL
-    myonLog(MG_LOG_LEVEL_ERROR, "Metal - Metal Is not enabled!");
+#ifndef myonGG_METAL
+    myonGLog(MG_LOG_LEVEL_ERROR, "Metal - Metal Is not enabled!");
 #else
-    myonLog(MG_LOG_LEVEL_DEBUG, "Metal - Instance destruction is no-op.");
+    myonGLog(MG_LOG_LEVEL_DEBUG, "Metal - Instance destruction is no-op.");
 #endif
     break;
   }

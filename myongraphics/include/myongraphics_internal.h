@@ -15,6 +15,14 @@ struct myonInstance_T {
   };
 };
 
+struct myonPhysicalDevice_T {
+  myonBackend backend;
+
+  union {
+    VulkanPhysicalDevice vulkan;
+  };
+};
+
 void myonLog(myonLogLevel level, const char* fmt, ...);
 
 #ifdef __cplusplus

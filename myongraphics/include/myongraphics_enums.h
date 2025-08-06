@@ -17,10 +17,12 @@ typedef enum {
 } myonBackend;
 
 typedef enum {
-  MG_RESULT_SUCCESS = 0,
+  MG_RESULT_SUCCESS = 1,
+  MG_RESULT_SUBOPTIMAL = 0,
   MG_RESULT_OUT_OF_MEMORY = -1,
   MG_RESULT_BACKEND_ERROR = -2,
-  MG_RESULT_UNKNOWN_BACKEND = -3
+  MG_RESULT_UNKNOWN_BACKEND = -3,
+  MG_RESULT_NIL_POINTER = -4
 } myonResult;
 
 typedef enum {

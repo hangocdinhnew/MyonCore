@@ -14,6 +14,11 @@ typedef struct {
   VkDebugUtilsMessengerEXT debugMessenger;
 } VulkanInstance;
 
+typedef struct {
+  VkPhysicalDevice device;
+  VkPhysicalDeviceProperties props;
+} VulkanPhysicalDevice;
+
 #ifdef __cplusplus
 }
 #endif

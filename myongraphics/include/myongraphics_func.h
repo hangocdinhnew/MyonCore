@@ -15,6 +15,10 @@ typedef void (*myonLogCallback)(myonLogLevel level, const char *message);
 myonResult myonCreateInstance(myonBackend backend, myonInstance *instance);
 void myonDestroyInstance(myonInstance instance);
 
+myonResult myonEnumeratePhysicalDevices(myonInstance instance,
+                                        myonPhysicalDevice *physicalDevice);
+void myonDestroyPhysicalDevice(myonPhysicalDevice device);
+
 void myonSetLogCallback(myonLogCallback callback);
 void myonSetLogLevel(myonLogLevel level);
 

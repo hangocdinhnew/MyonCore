@@ -194,12 +194,11 @@ static void vk_init_filtered_layers() {
 myonResult myonCreateInstance(myonBackend backend, myonInstance *instance) {
   myonLog(MG_LOG_LEVEL_TRACE, "myonCreateInstance");
 
-  myonInstance internal_Instance = (myonInstance)malloc(sizeof(myonInstance_T));
+  myonInstance internal_Instance = (myonInstance)calloc(1, sizeof(myonInstance_T));
   if (!internal_Instance) {
     myonLog(MG_LOG_LEVEL_ERROR, "Out of memory!");
     return MG_RESULT_OUT_OF_MEMORY;
   }
-  memset(internal_Instance, 0, sizeof(myonInstance_T));
 
   internal_Instance->backend = backend;
 

@@ -6,7 +6,10 @@ extern "C" {
 #endif
 
 typedef struct myonInstance_T myonInstance_T;
-typedef myonInstance_T* myonInstance;
+typedef myonInstance_T *myonInstance;
+
+typedef struct myonPhysicalDevice_T myonPhysicalDevice_T;
+typedef myonPhysicalDevice_T *myonPhysicalDevice;
 
 #ifdef __cplusplus
 }

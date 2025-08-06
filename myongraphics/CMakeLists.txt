@@ -12,6 +12,7 @@ target_sources(myongraphics
     PRIVATE
       include/myongraphics_internal.h
       src/myongraphics_instance.c
+      src/myongraphics_physicaldevice.c
     PUBLIC
       include/myongraphics_enums.h
       include/myongraphics_impl.h

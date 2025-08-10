@@ -16,6 +16,8 @@ public:
 
   void Run();
 
+  Window *getWindow() { return m_Window; }
+
 private:
   bool m_ShouldClose;
 

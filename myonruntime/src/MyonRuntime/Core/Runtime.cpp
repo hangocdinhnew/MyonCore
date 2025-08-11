@@ -8,6 +8,8 @@ MyonRuntime::MyonRuntime(MyonRuntimeConfig *p_RuntimeConfig) {
   m_Window = new Window(p_RuntimeConfig->name, p_RuntimeConfig->width,
                         p_RuntimeConfig->height);
 
+  m_Graphics = new Graphics();
+
   MR_CORE_INFO("Engine initialized");
 }
 

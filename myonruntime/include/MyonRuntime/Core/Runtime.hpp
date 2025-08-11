@@ -1,8 +1,10 @@
 #pragma once
 
 #include "MyonRuntime/Core/Window.hpp"
+#include "MyonRuntime/Graphics/Graphics.hpp"
 
 namespace MyonR {
+
 struct MyonRuntimeConfig {
   std::string name;
   int width;
@@ -22,6 +24,7 @@ private:
   bool m_ShouldClose;
 
   Window *m_Window;
+  Graphics *m_Graphics;
 };
 
 } // namespace MyonR

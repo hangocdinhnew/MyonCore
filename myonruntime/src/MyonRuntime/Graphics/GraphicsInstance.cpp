@@ -23,8 +23,7 @@ namespace MyonR {
     }
 
     static VKAPI_ATTR vk::Bool32 VKAPI_CALL debugCallback(
-        vk::DebugUtilsMessageSeverityFlagBitsEXT severity,
-        vk::DebugUtilsMessageTypeFlagsEXT type,
+        vk::DebugUtilsMessageSeverityFlagBitsEXT severity, vk::DebugUtilsMessageTypeFlagsEXT,
         const vk::DebugUtilsMessengerCallbackDataEXT* pCallbackData, void*)
     {
         switch (severity) {

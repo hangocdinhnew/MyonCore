@@ -84,7 +84,7 @@ namespace MyonR {
 
         vk::DebugUtilsMessageTypeFlagsEXT messageTypeFlags(vk::DebugUtilsMessageTypeFlagBitsEXT::eGeneral |
                                                            vk::DebugUtilsMessageTypeFlagBitsEXT::ePerformance |
-                                                           vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation );
+                                                           vk::DebugUtilsMessageTypeFlagBitsEXT::eValidation);
 
         vk::DebugUtilsMessengerCreateInfoEXT debugUtilsMessengerCreateInfoEXT{};
         debugUtilsMessengerCreateInfoEXT.messageSeverity = severityFlags;

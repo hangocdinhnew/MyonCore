@@ -8,7 +8,7 @@ MyonRuntime::MyonRuntime(MyonRuntimeConfig *p_RuntimeConfig) {
   m_Window = new Window(p_RuntimeConfig->name, p_RuntimeConfig->width,
                         p_RuntimeConfig->height);
 
-  m_Graphics = new Graphics();
+  m_Graphics = new Graphics(m_Window->getWindow());
 
   MR_CORE_INFO("Engine initialized");
 }
@@ -20,7 +20,6 @@ void MyonRuntime::Run() {
     while (SDL_PollEvent(&event)) {
       switch (event.type) {
       case SDL_EVENT_QUIT:
-      case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
         m_ShouldClose = true;
         break;
       default:

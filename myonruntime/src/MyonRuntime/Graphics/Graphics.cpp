@@ -3,10 +3,11 @@
 
 namespace MyonR {
 
-    Graphics::Graphics()
+    Graphics::Graphics(SDL_Window* p_Window)
     {
         MR_CORE_INFO("Creating Graphics API!");
         m_Instance = new GraphicsInstance();
+        m_Surface = new GraphicsSurface(p_Window, m_Instance->getInstance());
     }
 
     Graphics::~Graphics()

@@ -9,7 +9,8 @@ namespace MyonR {
         m_Instance = new GraphicsInstance();
     }
 
-    Graphics::~Graphics() {
+    Graphics::~Graphics()
+    {
         MR_CORE_INFO("Destroying Graphics API!");
         delete m_Instance;
     }

@@ -32,6 +32,7 @@ void MyonRuntime::Run() {
 MyonRuntime::~MyonRuntime() {
   MR_CORE_INFO("Shutting down Engine...");
 
+  delete m_Graphics;
   delete m_Window;
   SDL_Quit();
 }

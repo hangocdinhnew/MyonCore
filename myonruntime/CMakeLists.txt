@@ -12,6 +12,7 @@ target_sources(myonruntime
       src/MyonRuntime/Graphics/Graphics.cpp
       src/MyonRuntime/Graphics/GraphicsInstance.cpp
       src/MyonRuntime/Graphics/GraphicsSurface.cpp
+      src/MyonRuntime/Graphics/GraphicsDevice.cpp
     PUBLIC
       include/MyonRuntime/Core/Log.hpp
       include/MyonRuntime/Core/Window.hpp
@@ -19,6 +20,7 @@ target_sources(myonruntime
       include/MyonRuntime/Graphics/Graphics.hpp
       include/MyonRuntime/Graphics/GraphicsInstance.hpp
       include/MyonRuntime/Graphics/GraphicsSurface.hpp
+      include/MyonRuntime/Graphics/GraphicsDevice.hpp
       include/MyonRuntime.hpp
 )
 

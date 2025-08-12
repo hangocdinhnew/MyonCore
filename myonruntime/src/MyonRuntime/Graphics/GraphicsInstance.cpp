@@ -49,7 +49,7 @@ namespace MyonR {
         vk::ApplicationInfo appInfo{};
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_3;
+        appInfo.apiVersion = VK_API_VERSION_1_4;
         appInfo.pEngineName = "MyonEngine";
         appInfo.sType = vk::StructureType::eApplicationInfo;
 
@@ -62,9 +62,9 @@ namespace MyonR {
         createInfo.enabledExtensionCount = requiredExtensions.size();
         createInfo.ppEnabledExtensionNames = requiredExtensions.data();
 
-        for (int i = 0; i < requiredExtensions.size(); ++i)
+        for (const auto& requiredExtension : requiredExtensions)
         {
-            if (strcmp(requiredExtensions[i], VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) == 0) {
+            if (strcmp(requiredExtension, VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME) == 0) {
                 createInfo.flags = vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR;
                 break;
             }

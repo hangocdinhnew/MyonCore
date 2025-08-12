@@ -7,7 +7,7 @@ namespace MyonR {
     class GraphicsDevice
     {
     public:
-        GraphicsDevice(vk::Instance p_Instance);
+        GraphicsDevice(vk::Instance p_Instance, vk::SurfaceKHR p_Surface);
         ~GraphicsDevice();
 
         vk::PhysicalDevice getPhysicalDevice() {
@@ -19,6 +19,7 @@ namespace MyonR {
         vk::Device m_Device;
 
         vk::Queue m_GraphicsQueue;
+        vk::Queue m_PresentQueue;
     };
     
 }

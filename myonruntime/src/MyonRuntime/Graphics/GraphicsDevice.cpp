@@ -10,7 +10,7 @@ namespace MyonR {
         vk::KHRCreateRenderpass2ExtensionName
     };
 
-    GraphicsDevice::GraphicsDevice(vk::Instance p_Instance)
+    GraphicsDevice::GraphicsDevice(vk::Instance p_Instance, vk::SurfaceKHR p_Surface)
     {
         auto devices = p_Instance.enumeratePhysicalDevices(); 
 
@@ -94,6 +94,42 @@ namespace MyonR {
                 break;
             }
         }
+        
+        int presentIDX = 0;
+        if (m_PhysicalDevice.getSurfaceSupportKHR(queueFamIDX, p_Surface))
+        {
+            presentIDX = queueFamIDX;
+        }
+        else
+        {
+            for (uint32_t i = 0; i < queueFamProps.size(); ++i)
+            {
+                if ((queueFamProps[i].queueFlags & vk::QueueFlagBits::eGraphics) &&
+                    m_PhysicalDevice.getSurfaceSupportKHR(i, p_Surface))
+                {
+                    queueFamIDX = i;
+                    presentIDX = i;
+                    break;
+                }
+            }
+
+            if (presentIDX == queueFamProps.size())
+            {
+                for (uint32_t i = 0; i < queueFamProps.size(); ++i)
+                {
+                    if (m_PhysicalDevice.getSurfaceSupportKHR(i, p_Surface))
+                    {
+                        presentIDX = i;
+                        break;
+                    }
+                }
+            }
+        }
+ 
+        if (queueFamIDX == queueFamProps.size() || presentIDX == queueFamProps.size())
+        {
+            throw std::runtime_error("Could not find a queue family that supports graphics or present");
+        }
 
         auto features = m_PhysicalDevice.getFeatures2();
         vk::PhysicalDeviceVulkan13Features vulkan13Features;
@@ -118,6 +154,7 @@ namespace MyonR {
 
         m_Device = m_PhysicalDevice.createDevice(deviceCreateInfo);
         m_GraphicsQueue = m_Device.getQueue(queueFamIDX, 0);
+        m_PresentQueue = m_Device.getQueue(presentIDX, 0);
 
         MR_CORE_INFO("Logical Device created!");
     }

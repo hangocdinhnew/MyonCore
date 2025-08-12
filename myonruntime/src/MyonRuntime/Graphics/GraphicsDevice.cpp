@@ -36,16 +36,27 @@ namespace MyonR {
 
             auto availableDeviceExt = device.enumerateDeviceExtensionProperties();
 
+            for (const auto &availExt : availableDeviceExt)
+            {
+                if (strcmp(availExt.extensionName, "VK_KHR_portability_subset") != 0) {
+                    requiredDeviceExt.push_back("VK_KHR_portability_subset");
+                    break;
+                }
+            }
+
             bool supportsAllRequiredExt = true;
             for (const char* requiredExt : requiredDeviceExt) {
                 bool found = false;
-                for (const auto& availExt : availableDeviceExt) {
-                    if (strcmp(availExt.extensionName, requiredExt) == 0) {
+                for (const auto& availExt : availableDeviceExt)
+                {
+                    if (strcmp(availExt.extensionName, requiredExt) == 0)
+                    {
                         found = true;
                         break;
                     }
                 }
-                if (!found) {
+                if (!found)
+                {
                     supportsAllRequiredExt = false;
                     break;
                 }
@@ -72,12 +83,48 @@ namespace MyonR {
 
         MR_CORE_INFO("Physical Device found!");
 
-        auto queueFamilyProps = m_PhysicalDevice.getQueue;
+        auto queueFamProps = m_PhysicalDevice.getQueueFamilyProperties();
+
+        int queueFamIDX = 0;
+        for (int i = 0; i < queueFamProps.size(); ++i) {
+            if (queueFamProps[i].queueFlags & vk::QueueFlagBits::eGraphics) {
+                queueFamIDX = i;
+                break;
+            }
+        }
+
+        vk::StructureChain<
+            vk::PhysicalDeviceFeatures2,
+            vk::PhysicalDeviceVulkan13Features,
+            vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT> featureChain{};
+
+        featureChain.get<vk::PhysicalDeviceVulkan13Features>().dynamicRendering = vk::True;
+        featureChain.get<vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT>().extendedDynamicState = VK_TRUE;
+
+        float queuePriority = 0.0f;
+        vk::DeviceQueueCreateInfo deviceQueueCreateInfo{};
+        deviceQueueCreateInfo.queueFamilyIndex = queueFamIDX;
+        deviceQueueCreateInfo.queueCount = 1;
+        deviceQueueCreateInfo.pQueuePriorities = &queuePriority;
+
+        vk::DeviceCreateInfo deviceCreateInfo{};
+        deviceCreateInfo.pNext = &featureChain.get<vk::PhysicalDeviceFeatures2>();
+        deviceCreateInfo.queueCreateInfoCount = 1;
+        deviceCreateInfo.pQueueCreateInfos = &deviceQueueCreateInfo;
+        deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(requiredDeviceExt.size());
+        deviceCreateInfo.ppEnabledExtensionNames = requiredDeviceExt.data();
+
+        m_Device = m_PhysicalDevice.createDevice(deviceCreateInfo);
+        m_GraphicsQueue = m_Device.getQueue(queueFamIDX, 0);
+
+        MR_CORE_INFO("Logical Device created!");
     }
 
     GraphicsDevice::~GraphicsDevice()
     {
         MR_CORE_INFO("Destroying Device...");
+
+        m_Device.destroy();
     }
 
 }

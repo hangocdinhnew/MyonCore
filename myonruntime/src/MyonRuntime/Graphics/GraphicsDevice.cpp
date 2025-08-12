@@ -93,13 +93,13 @@ namespace MyonR {
             }
         }
 
-        vk::StructureChain<
-            vk::PhysicalDeviceFeatures2,
-            vk::PhysicalDeviceVulkan13Features,
-            vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT> featureChain{};
-
-        featureChain.get<vk::PhysicalDeviceVulkan13Features>().dynamicRendering = vk::True;
-        featureChain.get<vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT>().extendedDynamicState = VK_TRUE;
+        auto features = m_PhysicalDevice.getFeatures2();
+        vk::PhysicalDeviceVulkan13Features vulkan13Features;
+        vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedDynamicStateFeatures;
+        vulkan13Features.dynamicRendering = vk::True;
+        extendedDynamicStateFeatures.extendedDynamicState = vk::True;
+        vulkan13Features.pNext = &extendedDynamicStateFeatures;
+        features.pNext = &vulkan13Features;
 
         float queuePriority = 0.0f;
         vk::DeviceQueueCreateInfo deviceQueueCreateInfo{};
@@ -108,7 +108,7 @@ namespace MyonR {
         deviceQueueCreateInfo.pQueuePriorities = &queuePriority;
 
         vk::DeviceCreateInfo deviceCreateInfo{};
-        deviceCreateInfo.pNext = &featureChain.get<vk::PhysicalDeviceFeatures2>();
+        deviceCreateInfo.pNext = &features;
         deviceCreateInfo.queueCreateInfoCount = 1;
         deviceCreateInfo.pQueueCreateInfos = &deviceQueueCreateInfo;
         deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(requiredDeviceExt.size());

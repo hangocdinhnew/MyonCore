@@ -86,8 +86,10 @@ namespace MyonR {
         auto queueFamProps = m_PhysicalDevice.getQueueFamilyProperties();
 
         int queueFamIDX = 0;
-        for (int i = 0; i < queueFamProps.size(); ++i) {
-            if (queueFamProps[i].queueFlags & vk::QueueFlagBits::eGraphics) {
+        for (int i = 0; i < queueFamProps.size(); ++i)
+        {
+            if (queueFamProps[i].queueFlags & vk::QueueFlagBits::eGraphics)
+            {
                 queueFamIDX = i;
                 break;
             }

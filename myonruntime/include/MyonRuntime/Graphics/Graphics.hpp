@@ -3,6 +3,7 @@
 #include "GraphicsInstance.hpp"
 #include "GraphicsSurface.hpp"
 #include "GraphicsDevice.hpp"
+#include "GraphicsSwapChain.hpp"
 
 namespace MyonR {
 
@@ -15,6 +16,7 @@ private:
     GraphicsInstance* m_Instance;
     GraphicsSurface* m_Surface;
     GraphicsDevice* m_Device;
+    GraphicsSwapChain* m_SwapChain;
 };
 
 } // namespace MyonR

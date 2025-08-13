@@ -13,20 +13,18 @@ MyonRuntime::MyonRuntime(MyonRuntimeConfig *p_RuntimeConfig) {
   MR_CORE_INFO("Engine initialized");
 }
 
-void MyonRuntime::Run() {
-  while (!m_ShouldClose) {
+void MyonRuntime::PollEvents() {
     SDL_Event event;
-
+    
     while (SDL_PollEvent(&event)) {
-      switch (event.type) {
-      case SDL_EVENT_QUIT:
-        m_ShouldClose = true;
-        break;
-      default:
-        break;
-      }
+        switch (event.type) {
+        case SDL_EVENT_QUIT:
+            shouldClose = true;
+            break;
+        default:
+            break;
+        }
     }
-  }
 }
 
 MyonRuntime::~MyonRuntime() {

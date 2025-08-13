@@ -16,13 +16,13 @@ public:
   MyonRuntime(MyonRuntimeConfig *p_RuntimeConfig);
   ~MyonRuntime();
 
-  void Run();
+  void PollEvents();
 
   Window *getWindow() { return m_Window; }
 
-private:
-  bool m_ShouldClose;
+  bool shouldClose;
 
+private:
   Window *m_Window;
   Graphics *m_Graphics;
 };

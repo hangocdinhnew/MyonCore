@@ -13,6 +13,10 @@ namespace MyonR {
         vk::PhysicalDevice getPhysicalDevice() {
             return m_PhysicalDevice;
         }
+
+        vk::Device getDevice() {
+            return m_Device;
+        }
         
     private:
         vk::PhysicalDevice m_PhysicalDevice;

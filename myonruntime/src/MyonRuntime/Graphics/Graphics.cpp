@@ -27,26 +27,26 @@ namespace MyonR {
 
     void Graphics::acquireCmdBuffer()
     {
-        m_CommandBuffer = SDL_AcquireGPUCommandBuffer(m_Device);
-        MR_CORE_ASSERT(m_CommandBuffer, "Failed to acquire Command Buffer! Error: {}", SDL_GetError());
+        m_CmdBuffer = SDL_AcquireGPUCommandBuffer(m_Device);
+        MR_CORE_ASSERT(m_CmdBuffer, "Failed to acquire Command Buffer! Error: {}", SDL_GetError());
     }
 
     void Graphics::acquireTexture(uint32_t* swapchain_texture_width,
                                   uint32_t* swapchain_texture_height)
     {
-        if (!SDL_WaitAndAcquireGPUSwapchainTexture(m_CommandBuffer,
+        if (!SDL_WaitAndAcquireGPUSwapchainTexture(m_CmdBuffer,
                                                    m_Window,
-                                                   &m_SwapchainTexture,
+                                                   &m_ScTexture,
                                                    swapchain_texture_width,
                                                    swapchain_texture_height))
-            MR_CORE_ASSERT(m_CommandBuffer, "Failed to acquire Swapchain Texture! Error: {}", SDL_GetError());
+            MR_CORE_ASSERT(m_CmdBuffer, "Failed to acquire Swapchain Texture! Error: {}", SDL_GetError());
 
-        MR_CORE_ASSERT(m_CommandBuffer, "Unreachable code!");
+        MR_CORE_ASSERT(m_CmdBuffer, "Unreachable code!");
     }
 
     void Graphics::fillColorTargetInfo(SDL_GPUColorTargetInfo* color_target_info)
     {
-        color_target_info->texture = m_SwapchainTexture;
+        color_target_info->texture = m_ScTexture;
     }
 
     SDL_GPURenderPass* Graphics::beginRenderPass(const SDL_GPUColorTargetInfo* color_target_info,
@@ -55,7 +55,7 @@ namespace MyonR {
     {
         MR_CORE_ASSERT(color_target_info->texture, "Please use fillColorTargetInfo on targetInfo!");
 
-        return SDL_BeginGPURenderPass(m_CommandBuffer, color_target_info, num_color_targets,
+        return SDL_BeginGPURenderPass(m_CmdBuffer, color_target_info, num_color_targets,
                                       depth_stencil_target_info);
     }
 
@@ -66,6 +66,6 @@ namespace MyonR {
 
     void Graphics::submit()
     {
-        SDL_SubmitGPUCommandBuffer(m_CommandBuffer);
+        SDL_SubmitGPUCommandBuffer(m_CmdBuffer);
     }
 }

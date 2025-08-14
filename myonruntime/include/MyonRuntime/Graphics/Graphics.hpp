@@ -26,8 +26,8 @@ private:
     SDL_Window* m_Window;
 
     SDL_GPUDevice* m_Device;
-    SDL_GPUCommandBuffer* m_CommandBuffer;
-    SDL_GPUTexture* m_SwapchainTexture;
+    SDL_GPUCommandBuffer* m_CmdBuffer;
+    SDL_GPUTexture* m_ScTexture;
 };
 
 } // namespace MyonR

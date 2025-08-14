@@ -3,24 +3,69 @@
 
 namespace MyonR {
 
-    Graphics::Graphics(SDL_Window* p_Window)
+    Graphics::Graphics(SDL_Window* p_Window) :
+        m_Window(p_Window)
     {
-        MR_CORE_INFO("Creating Graphics API!");
-        m_Instance = new GraphicsInstance();
-        m_Surface = new GraphicsSurface(p_Window, m_Instance->getInstance());
-        m_Device = new GraphicsDevice(m_Instance->getInstance(), m_Surface->getSurface());
-        m_SwapChain = new GraphicsSwapChain(p_Window, m_Device->getPhysicalDevice(),
-                                            m_Device->getDevice(),
-                                            m_Surface->getSurface());
+        m_Device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV,
+                                       true,
+                                       nullptr);
+        MR_CORE_ASSERT(m_Device, "Failed to create Device! Error: {}", SDL_GetError());
+
+        if (!SDL_ClaimWindowForGPUDevice(m_Device, m_Window))
+            MR_DO_CORE_ASSERT("Failed to claim window for GPU Device! Error: {}", SDL_GetError());
+
+        MR_CORE_INFO("Created Graphics API!");
     }
 
     Graphics::~Graphics()
     {
         MR_CORE_INFO("Destroying Graphics API!");
-        delete m_SwapChain;
-        delete m_Device;
-        delete m_Surface;
-        delete m_Instance;
+
+        SDL_ReleaseWindowFromGPUDevice(m_Device, m_Window);
+        SDL_DestroyGPUDevice(m_Device);
     }
 
+    void Graphics::acquireCmdBuffer()
+    {
+        m_CommandBuffer = SDL_AcquireGPUCommandBuffer(m_Device);
+        MR_CORE_ASSERT(m_CommandBuffer, "Failed to acquire Command Buffer! Error: {}", SDL_GetError());
+    }
+
+    void Graphics::acquireTexture(uint32_t* swapchain_texture_width,
+                                  uint32_t* swapchain_texture_height)
+    {
+        if (!SDL_WaitAndAcquireGPUSwapchainTexture(m_CommandBuffer,
+                                                   m_Window,
+                                                   &m_SwapchainTexture,
+                                                   swapchain_texture_width,
+                                                   swapchain_texture_height))
+            MR_CORE_ASSERT(m_CommandBuffer, "Failed to acquire Swapchain Texture! Error: {}", SDL_GetError());
+
+        MR_CORE_ASSERT(m_CommandBuffer, "Unreachable code!");
+    }
+
+    void Graphics::fillColorTargetInfo(SDL_GPUColorTargetInfo* color_target_info)
+    {
+        color_target_info->texture = m_SwapchainTexture;
+    }
+
+    SDL_GPURenderPass* Graphics::beginRenderPass(const SDL_GPUColorTargetInfo* color_target_info,
+                                                 uint32_t num_color_targets,
+                                                 const SDL_GPUDepthStencilTargetInfo *depth_stencil_target_info)
+    {
+        MR_CORE_ASSERT(color_target_info->texture, "Please use fillColorTargetInfo on targetInfo!");
+
+        return SDL_BeginGPURenderPass(m_CommandBuffer, color_target_info, num_color_targets,
+                                      depth_stencil_target_info);
+    }
+
+    void Graphics::endRenderPass(SDL_GPURenderPass* renderpass)
+    {
+        SDL_EndGPURenderPass(renderpass);
+    }
+
+    void Graphics::submit()
+    {
+        SDL_SubmitGPUCommandBuffer(m_CommandBuffer);
+    }
 }

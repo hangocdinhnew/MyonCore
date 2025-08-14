@@ -5,26 +5,29 @@
 
 namespace MyonR {
 
-struct MyonRuntimeConfig {
+struct MyonRuntimeConfig
+{
   std::string name;
   int width;
   int height;
 };
 
-class MyonRuntime {
+class MyonRuntime
+{
 public:
-  MyonRuntime(MyonRuntimeConfig *p_RuntimeConfig);
+  MyonRuntime(MyonRuntimeConfig* p_RuntimeConfig);
   ~MyonRuntime();
 
   void PollEvents();
 
-  Window *getWindow() { return m_Window; }
+  Window* getWindow() { return m_Window; }
+  Graphics* getGraphics() { return m_Graphics; }
 
   bool shouldClose;
 
 private:
-  Window *m_Window;
-  Graphics *m_Graphics;
+  Window* m_Window;
+  Graphics* m_Graphics;
 };
 
 } // namespace MyonR

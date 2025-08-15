@@ -1,33 +1,59 @@
 #pragma once
 
 #include <SDL3/SDL.h>
+#include <VkBootstrap.h>
 
 namespace MyonR {
 
-class Graphics {
+class Graphics
+{
 public:
     Graphics(SDL_Window* p_Window);
     ~Graphics();
 
-    void acquireCmdBuffer();
-    void acquireTexture(uint32_t* swapchain_texture_width = nullptr,
-                        uint32_t* swapchain_texture_height = nullptr);
+    vkb::Instance* getInstance()
+    {
+        return &m_Instance;
+    }
 
-    SDL_GPUColorTargetInfo createColorTargetInfo();
+    vkb::InstanceDispatchTable* getInstDisp() {
+        return &m_InstDisp;
+    }
 
-    SDL_GPURenderPass* beginRenderPass(const SDL_GPUColorTargetInfo* color_target_info,
-                                       uint32_t num_color_targets,
-                                       const SDL_GPUDepthStencilTargetInfo *depth_stencil_target_info = nullptr);
-    void endRenderPass(SDL_GPURenderPass* renderpass);
+    VkSurfaceKHR* getSurface() {
+        return &m_Surface;
+    }
 
-    void submit();
+    vkb::Device* getDevice() {
+        return &m_Device;
+    }
 
+    vkb::DispatchTable* getDisp() {
+        return &m_Disp;
+    }
+
+    vkb::Swapchain* getSwapchain() {
+        return &m_Swapchain;
+    }
+
+    void createSwapchain();
+    void destroySwapchain();
+
+    void getQueue();
+    
 private:
-    SDL_Window* m_Window;
+    vkb::Instance m_Instance;
+    vkb::InstanceDispatchTable m_InstDisp;
 
-    SDL_GPUDevice* m_Device;
-    SDL_GPUCommandBuffer* m_CmdBuffer;
-    SDL_GPUTexture* m_ScTexture;
+    VkSurfaceKHR m_Surface;
+
+    vkb::Device m_Device;
+    vkb::DispatchTable m_Disp;
+
+    vkb::Swapchain m_Swapchain;
+
+    VkQueue m_GraphicsQueue;
+    VkQueue m_PresentQueue;
 };
 
 } // namespace MyonR

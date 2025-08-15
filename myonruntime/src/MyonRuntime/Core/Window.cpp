@@ -12,7 +12,7 @@ Window::Window(std::string name, int width, int height) {
     MR_DO_CORE_ASSERT("With error: {}", SDL_GetError());
   }
 
-  m_Window = SDL_CreateWindow(name.c_str(), width, height, SDL_WINDOW_RESIZABLE);
+  m_Window = SDL_CreateWindow(name.c_str(), width, height, SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 
   MR_CORE_ASSERT(m_Window, "Failed to create Window! With error: {}", SDL_GetError());
 

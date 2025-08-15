@@ -38,8 +38,6 @@ public:
 
     void createSwapchain();
     void destroySwapchain();
-
-    void getQueue();
     
 private:
     vkb::Instance m_Instance;

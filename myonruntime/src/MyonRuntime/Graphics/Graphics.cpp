@@ -68,6 +68,15 @@ namespace MyonR {
         createSwapchain();
         MR_CORE_INFO("Created Swapchain!");
 
+        auto gq = m_Device.get_queue(vkb::QueueType::graphics);
+        MR_CORE_ASSERT(gq, "Failed to get Graphics Queue! Error: {}", gq.error().message());
+        m_GraphicsQueue = gq.value();
+
+        auto pq = m_Device.get_queue(vkb::QueueType::present);
+        MR_CORE_ASSERT(pq, "Failed to get Present Queue! Error: {}", pq.error().message());
+        m_PresentQueue = pq.value();
+        MR_CORE_INFO("Got queue!");
+
         MR_CORE_INFO("Created Graphics API!");
     }
 
@@ -93,16 +102,5 @@ namespace MyonR {
     void Graphics::destroySwapchain()
     {
         vkb::destroy_swapchain(m_Swapchain);
-    }
-
-    void Graphics::getQueue()
-    {
-        auto gq = m_Device.get_queue(vkb::QueueType::graphics);
-        MR_CORE_ASSERT(gq, "Failed to get Graphics Queue! Error: {}", gq.error().message());
-        m_GraphicsQueue = gq.value();
-
-        auto pq = m_Device.get_queue(vkb::QueueType::present);
-        MR_CORE_ASSERT(pq, "Failed to get Present Queue! Error: {}", pq.error().message());
-        m_PresentQueue = pq.value();
     }
 }

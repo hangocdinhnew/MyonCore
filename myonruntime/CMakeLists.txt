@@ -1,5 +1,3 @@
-find_package(PkgConfig REQUIRED)
-
 add_library(myonruntime SHARED)
 
 target_sources(myonruntime

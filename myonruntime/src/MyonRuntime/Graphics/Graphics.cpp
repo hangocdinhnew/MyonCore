@@ -44,9 +44,12 @@ namespace MyonR {
         MR_CORE_ASSERT(m_CmdBuffer, "Unreachable code!");
     }
 
-    void Graphics::fillColorTargetInfo(SDL_GPUColorTargetInfo* color_target_info)
+    SDL_GPUColorTargetInfo Graphics::createColorTargetInfo()
     {
-        color_target_info->texture = m_ScTexture;
+        SDL_GPUColorTargetInfo colorTargetInfo{};
+        colorTargetInfo.texture = m_ScTexture;
+
+        return colorTargetInfo;
     }
 
     SDL_GPURenderPass* Graphics::beginRenderPass(const SDL_GPUColorTargetInfo* color_target_info,

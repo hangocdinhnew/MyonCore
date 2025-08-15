@@ -13,7 +13,7 @@ public:
     void acquireTexture(uint32_t* swapchain_texture_width = nullptr,
                         uint32_t* swapchain_texture_height = nullptr);
 
-    void fillColorTargetInfo(SDL_GPUColorTargetInfo* color_target_info);
+    SDL_GPUColorTargetInfo createColorTargetInfo();
 
     SDL_GPURenderPass* beginRenderPass(const SDL_GPUColorTargetInfo* color_target_info,
                                        uint32_t num_color_targets,

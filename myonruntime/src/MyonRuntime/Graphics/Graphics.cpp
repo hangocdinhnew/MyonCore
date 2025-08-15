@@ -83,7 +83,7 @@ namespace MyonR {
 
     void Graphics::createSwapchain()
     {
-        vkb::SwapchainBuilder swapchain_builder{ m_Device };
+        vkb::SwapchainBuilder swapchain_builder{m_Device};
         auto swap_ret = swapchain_builder.set_old_swapchain(m_Swapchain).build();
         MR_CORE_ASSERT(swap_ret, "Failed to create Swapchain! Error: {}", swap_ret.error().message());
 

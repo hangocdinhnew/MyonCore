@@ -4,6 +4,13 @@
 #include "MyonRuntime/Graphics/Graphics.hpp"
 
 namespace MyonR {
+    std::vector<const char*> requiredDeviceExtension = {
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+        VK_KHR_SPIRV_1_4_EXTENSION_NAME,
+        VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME,
+        VK_KHR_CREATE_RENDERPASS_2_EXTENSION_NAME
+    };
+    
     static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT severity,
                                                         VkDebugUtilsMessageTypeFlagsEXT type,
                                                         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
@@ -32,6 +39,7 @@ namespace MyonR {
         vkb::InstanceBuilder instance_builder;
         instance_builder.request_validation_layers();
         instance_builder.set_debug_callback(debugCallback);
+        instance_builder.require_api_version(1, 3);
 
         auto instance_ret = instance_builder.build();
         MR_CORE_ASSERT(instance_ret, "Failed to create instance! Error: {}", instance_ret.error().message());
@@ -49,12 +57,21 @@ namespace MyonR {
         MR_CORE_INFO("Created Surface!");
 
         vkb::PhysicalDeviceSelector phys_device_selector(m_Instance);
+        phys_device_selector.add_required_extensions(requiredDeviceExtension);
+        
         VkPhysicalDeviceVulkan13Features vkFeature13{};
         vkFeature13.synchronization2 = VK_TRUE;
         vkFeature13.dynamicRendering = VK_TRUE;
-        
+
+        VkPhysicalDeviceExtendedDynamicState2FeaturesEXT extendeddynamicstate{};
+        extendeddynamicstate.extendedDynamicState2 = VK_TRUE;
+        extendeddynamicstate.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT;
+        vkFeature13.pNext = &extendeddynamicstate;
         phys_device_selector.set_required_features_13(vkFeature13);
-        auto phys_device_ret = phys_device_selector.set_surface(m_Surface).select();
+
+        phys_device_selector.set_surface(m_Surface);
+        
+        auto phys_device_ret = phys_device_selector.select();
         MR_CORE_ASSERT(phys_device_ret, "Failed to enumerate physical device! Error: {}", phys_device_ret.error().message());
         vkb::PhysicalDevice physical_device = phys_device_ret.value();
 

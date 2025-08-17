@@ -71,4 +71,10 @@ namespace MyonR {
     {
         SDL_SubmitGPUCommandBuffer(m_CmdBuffer);
     }
+
+    void Graphics::setSwapchainParameters(SDL_GPUSwapchainComposition swapchain_composition,
+                                          SDL_GPUPresentMode present_mode)
+    {
+        SDL_SetGPUSwapchainParameters(m_Device, m_Window, swapchain_composition, present_mode);
+    }
 }

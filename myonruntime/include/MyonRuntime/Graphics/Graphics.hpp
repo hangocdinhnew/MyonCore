@@ -22,6 +22,9 @@ public:
 
     void submit();
 
+    void setSwapchainParameters(SDL_GPUSwapchainComposition swapchain_composition,
+                                SDL_GPUPresentMode present_mode);
+
 private:
     SDL_Window* m_Window;
 

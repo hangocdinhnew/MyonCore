@@ -44,7 +44,6 @@
             xorg.libXext
             libxkbcommon
             vulkan-loader
-            wgpu-native
             spdlog
             glm
           ];
@@ -65,7 +64,7 @@
             ] ++ runtimeDeps;
 
             shellHook = ''
-              export CMAKE_INSTALL_RPATH=${libraryPath}
+              export LD_LIBRARY_PATH=${libraryPath}:$LD_LIBRARY_PATH
             '';
           };
       });

@@ -77,4 +77,16 @@ namespace MyonR {
     {
         SDL_SetGPUSwapchainParameters(m_Device, m_Window, swapchain_composition, present_mode);
     }
+
+    void Graphics::clearColor(float r, float g, float b,
+                              float a)
+    {
+        auto colorTargetInfo = createColorTargetInfo();
+        colorTargetInfo.clear_color = { r, g, b, a };
+        colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
+        colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
+
+        auto renderPass = beginRenderPass(&colorTargetInfo, 1);
+        endRenderPass(renderPass);
+    }
 }

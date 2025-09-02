@@ -20,6 +20,8 @@ public:
                                        const SDL_GPUDepthStencilTargetInfo *depth_stencil_target_info = nullptr);
     void endRenderPass(SDL_GPURenderPass* renderpass);
 
+    void clearColor(float r, float b, float g, float a);
+
     void submit();
 
     void setSwapchainParameters(SDL_GPUSwapchainComposition swapchain_composition,
